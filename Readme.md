@@ -4,7 +4,7 @@ README
 thelia-vagrant-config
 ---------------------
 
-Vagrant base config for installong and test current Thelia CMS development (aka thelia 2)
+Vagrant base config for installing and testing current Thelia CMS development (aka thelia 2)
 
 This config is in beta and maybe can have some issues
 
@@ -13,7 +13,7 @@ Installation
 
 Install Vagrant and virtualbox : http://docs-v1.vagrantup.com/v1/docs/getting-started/index.html
 
-then : 
+then :
 ``` bash
 $ git clone --recursive https://github.com/lunika/thelia-vagrant-config.git
 $ cd thelia-vagrant-config
