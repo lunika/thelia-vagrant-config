@@ -36,7 +36,7 @@ class system-update {
 
 class development {
 
-  $devPackages = [ "curl", "git", ]
+  $devPackages = [ "curl", "git", "vim"]
   package { $devPackages:
     ensure => "latest",
     require => Exec['apt-get update'],
@@ -69,6 +69,7 @@ class thelia {
 class devbox_php {
 
     php::module { [ 'curl', 'gd', 'mcrypt', 'mysql', ]:
+        require => Exec["apt-get update"],
         notify => Class['apache'] 
     }
     
@@ -76,15 +77,15 @@ class devbox_php {
 
     php::module { ['xdebug', ]:
         notify => Class['apache'],
-        source => '/vagrant/conf/php'
+        source => '/vagrant/conf/php/xdebug.ini'
     }
  
     
-    php::conf { [ 'pdo', 'pdo_mysql', ]:
+    php::conf { ['mysqli', 'pdo', 'pdo_mysql', ]:
         require => Package['php-mysql'],
         notify => Class['apache'],
     }
-    
+
     file { "/etc/php5/conf.d/custom.ini":
         owner => root,
         group => root,
@@ -110,12 +111,27 @@ class devbox_php {
         template    => 'apache/virtualhost/vhost.conf.erb'
     }
 
+    package { "phpmyadmin":
+        ensure      => "latest",
+        require     => Exec["apt-get update"],
+        notify      => Class['apache']
+    }
+
+    file { "/etc/apache2/conf.d/phpmyadmin.conf":
+        ensure => "link",
+        target => "/etc/phpmyadmin/apache.conf"
+    }
+
 }
 
 
 
 class { 'apt':
   always_apt_update => true
+}
+
+class { "mysql":
+  root_password => 'root',
 }
 
 Exec["apt-get update"] -> Package <||>
