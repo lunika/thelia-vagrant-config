@@ -32,4 +32,5 @@ $ git clone --recursive https://github.com/lunika/thelia-vagrant-config.git
 $ cd thelia-vagrant-config
 $ vagrant up
 ```
-wait while vagrant box is intalling and finish the installation process at the mysql point (https://github.com/thelia/thelia/blob/master/Readme.md).
+wait while vagrant box is installing and finish the installation process at the mysql point (https://github
+.com/thelia/thelia/blob/master/Readme.md).

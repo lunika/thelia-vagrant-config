@@ -21,7 +21,7 @@ class system-update {
         key_server => 'keyserver.ubuntu.com',
     }
 
-    Exec['apt_update'] -> Package <||>
+    # Exec['apt_update'] -> Package <||>
 
     exec { 'apt-get update':
         command => 'sudo apt-get update --fix-missing',
@@ -58,7 +58,7 @@ class thelia {
     }
 
     exec { 'run composer for installing dependencies':
-        command => 'composer --verbose install',
+        command => 'composer install',
         cwd => '/var/www/thelia',
         timeout => 0,
         tries => 10,
@@ -80,7 +80,7 @@ class devbox_php {
     }
  
     
-    php::conf { [ 'mysqli', 'pdo', 'pdo_mysql', ]:
+    php::conf { [ 'pdo', 'pdo_mysql', ]:
         require => Package['php-mysql'],
         notify => Class['apache'],
     }
@@ -91,6 +91,23 @@ class devbox_php {
         mode => 664,
         source => "/vagrant/conf/php/custom.ini",
         notify => Class['apache'],
+    }
+
+    # PEAR Package
+    pear::package { "PEAR": }
+
+    # PHPUnit
+    pear::package { "PHPUnit":
+        version => "latest",
+        repository => "pear.phpunit.de",
+        require => Pear::Package["PEAR"],
+    }
+
+    # create apache vhost
+    apache::vhost { "thelia":
+        docroot     => "/var/www/thelia/web",
+        server_name => "thelia.local",
+        template    => 'apache/virtualhost/vhost.conf.erb'
     }
 
 }
@@ -108,8 +125,9 @@ include development
 
 include apache
 include mysql
+include pear
 include php::apache2
 include devbox_php
 
-include phpqatools
+# include phpqatools
 include thelia
