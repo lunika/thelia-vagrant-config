@@ -34,3 +34,14 @@ $ vagrant up
 ```
 wait while vagrant box is installing and finish the installation process at the mysql point (https://github
 .com/thelia/thelia/blob/master/Readme.md).
+
+Usage
+-----
+
+You can access Thelia at this url : http://thelia.local/index_dev.php
+
+For better performance you can enable nfs shared folders. Change to true this 2 lines in Vagrantfile but before ensure that your system support NFS : 
+```
+config.vm.share_folder("v-root", "/vagrant", ".", :nfs => false)
+config.vm.share_folder("v-web", "/var/www", "./www", :nfs => false)
+```
